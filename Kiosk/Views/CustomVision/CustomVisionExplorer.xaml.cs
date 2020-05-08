@@ -329,7 +329,7 @@ namespace IntelligentKioskSample.Views
                 {
                     if (tag.ImageCount > 0)
                     {
-                        var imageModelSample = (await trainingEndPoint.GetTaggedImagesAsync(projectId, null, new string[] { tag.Id.ToString() }, null, 1)).First();
+                        var imageModelSample = (await trainingEndPoint.GetTaggedImagesAsync(projectId, null, new Guid[] { tag.Id }, null, 1)).First();
 
                         var tagRegion = imageModelSample.Regions?.FirstOrDefault(r => r.TagId == tag.Id);
                         if (tagRegion == null || (tagRegion.Width == 0 && tagRegion.Height == 0))

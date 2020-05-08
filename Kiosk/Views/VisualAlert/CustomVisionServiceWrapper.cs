@@ -101,7 +101,7 @@ namespace IntelligentKioskSample.Views.VisualAlert
                 {
                     addResult = await trainingApi.CreateImagesFromDataAsync(
                         projectId,
-                        await item.GetImageStreamCallback(), tag != null ? new string[] { tag.Id.ToString() } : null);
+                        await item.GetImageStreamCallback(), tag != null ? new Guid[] { tag.Id } : null);
                 }
                 else
                 {

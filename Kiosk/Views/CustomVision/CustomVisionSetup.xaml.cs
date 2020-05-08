@@ -418,7 +418,7 @@ namespace IntelligentKioskSample.Views
 
             try
             {
-                IEnumerable<Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models.Image> images = await trainingApi.GetTaggedImagesAsync(this.CurrentProject.Id, null, new string[] { this.SelectedTag.Id.ToString() }, null, 200);
+                IEnumerable<Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models.Image> images = await trainingApi.GetTaggedImagesAsync(this.CurrentProject.Id, null, new Guid[] { this.SelectedTag.Id }, null, 200);
                 this.SelectedTagImages.AddRange(images.Select(img =>
                     new ImageViewModel
                     {
@@ -471,7 +471,7 @@ namespace IntelligentKioskSample.Views
                     {
                         addResult = await trainingApi.CreateImagesFromDataAsync(
                             this.CurrentProject.Id,
-                            await item.GetImageStreamCallback(), new string[] { this.SelectedTag.Id.ToString() });
+                            await item.GetImageStreamCallback(), new Guid[] { this.SelectedTag.Id });
                     }
                     else
                     {
@@ -521,7 +521,7 @@ namespace IntelligentKioskSample.Views
                 foreach (var item in this.selectedTagImagesGridView.SelectedItems.ToArray())
                 {
                     ImageViewModel tagImage = (ImageViewModel)item;
-                    await trainingApi.DeleteImagesAsync(this.CurrentProject.Id, new string[] { tagImage.Image.Id.ToString() });
+                    await trainingApi.DeleteImagesAsync(this.CurrentProject.Id, new Guid[] { tagImage.Image.Id });
                     this.SelectedTagImages.Remove(tagImage);
 
                     this.needsTraining = true;
@@ -589,7 +589,7 @@ namespace IntelligentKioskSample.Views
             if (imageViewModel.Image.Regions != null && imageViewModel.Image.Regions.Any())
             {
                 // remove the current regions from the image
-                await this.trainingApi.DeleteImageRegionsAsync(this.CurrentProject.Id, imageViewModel.Image.Regions.Select(r => r.RegionId.ToString()).ToArray());
+                await this.trainingApi.DeleteImageRegionsAsync(this.CurrentProject.Id, imageViewModel.Image.Regions.Select(r => r.RegionId).ToArray());
 
                 // re-add the regions to the image based on the possibly new locations, taking into account the ones that might haven been deleted in the UI
                 var regionsToReAdd = imageViewModel.Image.Regions.Where(r => !imageViewModel.DeletedImageRegions.Contains(r));
@@ -612,7 +612,7 @@ namespace IntelligentKioskSample.Views
             }
 
             // update the regions that are shown in the thumbnail UI
-            var newImages = await this.trainingApi.GetImagesByIdsAsync(this.CurrentProject.Id, new string[] { imageViewModel.Image.Id.ToString() });
+            var newImages = await this.trainingApi.GetImagesByIdsAsync(this.CurrentProject.Id, new Guid[] { imageViewModel.Image.Id });
             imageViewModel.UpdateImageData(newImages.First());
         }
 

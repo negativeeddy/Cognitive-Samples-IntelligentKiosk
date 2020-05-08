@@ -84,12 +84,12 @@ namespace ServiceHelpers
 
         public static async Task<ImagePrediction> PredictImageUrlWithRetryAsync(this ICustomVisionPredictionClient predictionApi, Guid projectId, ImageUrl imageUrl, Guid iterationId)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<ImagePrediction>(async () => await predictionApi.PredictImageUrlAsync(projectId, imageUrl, iterationId));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<ImagePrediction>(async () => await predictionApi.PredictImageUrlWithRetryAsync(projectId, imageUrl, iterationId));
         }
 
         public static async Task<ImagePrediction> PredictImageWithRetryAsync(this ICustomVisionPredictionClient predictionApi, Guid projectId, Func<Task<Stream>> imageStreamCallback, Guid iterationId)
         {
-            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<ImagePrediction>(async () => await predictionApi.PredictImageAsync(projectId, await imageStreamCallback(), iterationId));
+            return await RunTaskWithAutoRetryOnQuotaLimitExceededError<ImagePrediction>(async () => await predictionApi.PredictImageWithRetryAsync(projectId, imageStreamCallback, iterationId));
         }
 
         public static async Task<TrainingModels::Export> ExportIteration(this ICustomVisionTrainingClient trainingApi, Guid projectId, Guid iterationId, int timeoutInSecond = 30)
